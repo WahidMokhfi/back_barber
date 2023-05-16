@@ -1,20 +1,39 @@
-const express = require('express')
-const morgan = require('morgan')
-const serveFavicon = require('serve-favicon')
-const cors = require('cors')
-// const sequelize = require('./db/sequelize')
-// const Service = require('./routes/service')
-const app = express()
-const port = 3001
+const express = require('express');
+const morgan = require('morgan');
+const serveFavicon = require('serve-favicon');
+const sequelize = require('./db/sequelize');
+const cors = require('cors');
 
-app
-    .use(morgan('dev'))
-    // .use(serveFavicon(__dirname + '/favicon.png'))
-    .use(express.json())
-    .use(cors())
-    // .use('/api/service', Service)
-    .listen(port, () => {
-        console.log(`L'app sur le port ${port}`)
-    }) 
+const app = express();
+const port = 5000;
 
-// sequelize.initDb()
+app.use(cors({
+  origin: 'http://localhost:3001'
+}));
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
+app.use(morgan('dev'))
+  .use(serveFavicon(__dirname + '/favicon.ico'))
+  .use(express.json());
+
+sequelize.initDb();
+
+const serviceRouter = require('./routes/serviceRoutes');
+const userRouter = require('./routes/userRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
+
+app.use('/api/services', serviceRouter);
+app.use('/api/users', userRouter);
+app.use('/api/reviews', reviewRouter);
+
+app.listen(port, () => {
+  console.log(`L'app sur le port ${port}`);
+});
+
+
