@@ -75,3 +75,8 @@ sequelize.authenticate()
 module.exports = {
     sequelize, ServiceModel, UserModel, initDb, ReviewModel
 }
+
+
+
+
+
