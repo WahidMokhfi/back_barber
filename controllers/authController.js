@@ -3,6 +3,7 @@ const { UserModel, ReviewModel } = require('../db/sequelize')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const privateKey = require('../auth/private_key')
+const e= require('cors')
 
 exports.login = (req, res) => {
     if(!req.body.username || !req.body.password){
