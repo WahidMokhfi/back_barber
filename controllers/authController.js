@@ -28,7 +28,7 @@ exports.login = (req, res) => {
                     // json web token
                     const token = jwt.sign({
                         data: user.id
-                      }, privateKey, { expiresIn: '1h' });
+                      }, privateKey, { expiresIn: '8h' });
 
                     const msg = "L'utilisateur a été connecté avec succès."
                     user.password = "hidden"

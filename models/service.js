@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('Service', {
+  const Service = sequelize.define('Service', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -19,25 +19,33 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: {
-        msg: 'La desciption est déjà prise'
-      }
+      allowNull: false
     },
     price: {
-      type: DataTypes.FLOAT, 
+      type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
         isPriceValid(value) {
+          // Ajoutez ici vos validations personnalisées pour le champ de prix, si nécessaire
         }
       }
     }
   }, {
     timestamps: true,
     createdAt: 'created',
-    updatedAt: false
+    updatedAt: false,
+    indexes: [
+      {
+        unique: true,
+        fields: ['name'] // Ajoutez cette ligne pour définir l'index unique sur le champ "name"
+      }
+    ]
   });
+
+  return Service;
 };
+
+
 
 
 
