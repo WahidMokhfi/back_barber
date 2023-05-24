@@ -150,4 +150,3 @@ exports.createService = (req, res) => {
         res.status(500).json(error)
     })
 }
-
