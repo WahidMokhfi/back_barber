@@ -47,7 +47,7 @@ const initDb = async () => {
           name: element.name,
           description: element.description,
           price: element.price,
-          CategoryId: element.categoryId
+          created: new Date()
         });
       }
     }
@@ -102,6 +102,37 @@ module.exports = {
   initDb,
   ReviewModel
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
