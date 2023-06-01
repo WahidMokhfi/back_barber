@@ -25,3 +25,15 @@ module.exports = (sequelize) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
