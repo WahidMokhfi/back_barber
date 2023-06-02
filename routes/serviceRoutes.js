@@ -16,7 +16,7 @@ router
     .route('/:id') 
     .get(serviceController.findServiceByPk)
     .put(authController.protect, serviceController.updateService)
-    .delete(authController.protect, authController.restrictTo('user', 'admin'), serviceController.deleteService);
+    .delete(/* authController.protect, authController.restrictTo('user', 'admin'), */ serviceController.deleteService);
 
 module.exports = router;
 
