@@ -63,9 +63,8 @@ exports.signup = (req, res) => {
 
 exports.logout = (req, res) => {
   // Supprimer le jeton d'authentification stocké dans le localStorage
-  // ou les cookies selon votre configuration
+  
 
-  // Exemple de suppression du jeton dans le localStorage
   localStorage.removeItem('token');
 
   const msg = "Déconnexion réussie.";

@@ -26,7 +26,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isPriceValid(value) {
-          // Ajoutez ici vos validations personnalisées pour le champ de prix, si nécessaire
+          if (value <= 0) {
+            throw new Error('Le prix doit être supérieur à zéro.');
+          }
         }
       }
     }
@@ -37,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     indexes: [
       {
         unique: true,
-        fields: ['name'] // Ajoutez cette ligne pour définir l'index unique sur le champ "name"
+        fields: ['name'] 
       }
     ]
   });
