@@ -2,6 +2,7 @@ const { Op, UniqueConstraintError, ValidationError } = require('sequelize');
 const { UserModel } = require('../db/sequelize');
 const jwt = require('jsonwebtoken');
 const privateKey = require('../auth/private_key');
+const user = require('../models/user');
 
 exports.findAllUsers = (req, res) => {
     UserModel.scope('withoutPassword')
@@ -16,11 +17,72 @@ exports.findAllUsers = (req, res) => {
         });
 };
 
-exports.logout = (req, res) => {
-    // Supprimer le jeton d'authentification stocké dans le localStorage
-    // ou effectuer toute autre action de déconnexion nécessaire
+exports.findUserByPk = (req, res) => {
+    // Afficher le user correspondant à l'id en params, en le récupérant dans la bdd findByPk()
+    UserModel.findByPk(req.params.id, {
+    })
+        .then(user => {
+            if (user === null) {
+                const message = `L'user' demandé n'existe pas.`
+                res.status(404).json({ message })
+            } else {
+                const message = "Un user a bien été trouvé."
+                res.json({ message, data: service });
+            }
+        })
+        .catch(error => {
+            const message = `La liste des users n'a pas pu se charger. Reessayez ulterieurement.`
+            res.status(500).json({ message, data: error })
+        })
+}
 
-    // Exemple de suppression du jeton dans le localStorage
+exports.updateUser = (req, res) => {
+    // Modifier le service en base de données qui correspond à l'id spécifé dans les params
+    UserModel.update(req.body, {
+        where: {
+            id: req.params.id
+        }
+    }).then((user) => {
+        if(user === null){
+            const msg = "L'user' demandé n'existe pas."
+            res.json({message: msg})
+        } else {
+            const msg = "L'user' a bien été modifié."
+            res.json({message: msg, data: user})
+        }
+    }).catch((error) => {
+        if(error instanceof UniqueConstraintError || error instanceof ValidationError){
+            return res.status(400).json({message: error.message, data: error})
+        } 
+        const msg = "Impossible de mettre à jour l'user'."
+        res.status(500).json({message: msg})
+    })
+}
+
+exports.deleteUser = (req, res) => {
+    UserModel.findByPk(req.params.id)
+        .then(user => {
+            if (user === null) {
+                const message = `L'user' demandé n'existe pas.`
+                return res.status(404).json({ message })
+            }
+            return UserModel.destroy({
+                where: {
+                    id: req.params.id
+                }
+            })
+                .then(() => {
+                    const message = `L'user' ${user.username} a bien été supprimé.`
+                    res.json({ message, data: user });
+                })
+        })
+        .catch(error => {
+            const message = `Impossible de supprimer l'user'.`
+            res.status(500).json({ message, data: error })
+        })
+}
+
+exports.logout = (req, res) => {
     localStorage.removeItem('token');
 
     const msg = "Déconnexion réussie.";

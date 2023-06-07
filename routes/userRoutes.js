@@ -5,7 +5,15 @@ const authController = require('../controllers/authController');
 
 router
   .route('/')
-  .get(userController.findAllUsers);
+  .get(userController.findAllUsers)
+
+  
+  
+  router
+    .route('/:id')
+    .get(userController.findUserByPk)
+    .put(authController.protect, userController.updateUser)
+    .delete(/* authController.protect, authController.restrictTo('user', 'admin'), */ userController.deleteUser);
 
 router
   .route('/login')
@@ -20,3 +28,4 @@ router
   .get(authController.logout);
 
 module.exports = router;
+

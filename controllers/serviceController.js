@@ -5,7 +5,7 @@ const { ServiceModel, ReviewModel, sequelize } = require('../db/sequelize')
 
 exports.findAllServices = (req, res) => {
     if(req.query.search){
-        // notre recherche avec paramètres
+        // recherche avec paramètres
         ServiceModel.findAll({ where: { name: {[Op.like] : `%${req.query.search}%`} } })
         .then((elements)=>{
             if(!elements.length){
