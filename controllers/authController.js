@@ -43,9 +43,16 @@ exports.login = (req, res) => {
 exports.signup = (req, res) => {
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
+      let roles = ["user"]; // Par défaut, le rôle est défini sur "user"
+
+      if (req.body.role === "admin") {
+        roles.push("admin"); // Si le rôle est "admin", ajouter le rôle "admin"
+      }
+
       return UserModel.create({
         username: req.body.username,
-        password: hash
+        password: hash,
+        roles: roles, // Attribuer les rôles appropriés à l'utilisateur
       }).then((userCreated) => {
         const message = `L'utilisateur ${userCreated.username} a bien été créé`;
         userCreated.password = 'hidden';
@@ -63,8 +70,6 @@ exports.signup = (req, res) => {
 
 exports.logout = (req, res) => {
   // Supprimer le jeton d'authentification stocké dans le localStorage
-  
-
   localStorage.removeItem('token');
 
   const msg = "Déconnexion réussie.";
@@ -127,3 +132,4 @@ exports.restrictToOwnUser = (req, res, next) => {
       res.status(500).json({ message, data: err });
     });
 };
+

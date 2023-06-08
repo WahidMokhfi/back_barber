@@ -1,7 +1,7 @@
 const userRoles = ['user', 'admin', 'superadmin'];
 
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('User', {
+  const User = sequelize.define('User', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       unique: {
-        msg: 'Le nom d\'utilisateur est déjà pris.'
+        msg: "Le nom d'utilisateur est déjà pris."
       },
       validate: {
         notEmpty: {
-          msg: 'Ce champ ne peut pas être vide.'
+          msg: "Ce champ ne peut pas être vide."
         }
       }
     },
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         areRolesValid(roles) {
           if (!roles) {
-            throw new Error('Un utilisateur doit avoir au moins un rôle');
+            throw new Error("Un utilisateur doit avoir au moins un rôle");
           }
           roles.split(',').forEach(role => {
             if (!userRoles.includes(role)) {
@@ -55,7 +55,18 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
+
+  User.associate = (models) => {
+    User.hasMany(models.Review, {
+      foreignKey: 'userId',
+      allowNull: false
+    });
+  };
+
+  return User;
 };
+
+
 
 
 

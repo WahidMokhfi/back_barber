@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('Review', {
+  const Review = sequelize.define('Review', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -17,14 +17,19 @@ module.exports = (sequelize, DataTypes) => {
         max: 5
       }
     }
-  }, {
-    getterMethods: {
-      stars() {
-        const rating = this.getDataValue('rating');
-        return '⭐'.repeat(rating);
-      }
-    }
   });
+
+  Review.associate = (models) => {
+    Review.belongsTo(models.User, {
+      foreignKey: 'reviewUserId',
+      allowNull: false
+    });
+  };
+
+  return Review;
 };
+
+
+
 
 
