@@ -5,29 +5,39 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    content: {
-      type: DataTypes.STRING,
+    comment: {
+      type: DataTypes.TEXT,
       allowNull: false
     },
-    rating: {
+    note: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      field: 'created_at'
+    },
+    user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      validate: {
-        min: 1,
-        max: 5
-      }
+      field: 'user_id'
     }
+  }, {
+    timestamps: false
   });
 
   Review.associate = (models) => {
     Review.belongsTo(models.User, {
-      foreignKey: 'reviewUserId',
+      foreignKey: 'user_id',
       allowNull: false
     });
   };
 
   return Review;
 };
+
+
 
 
 

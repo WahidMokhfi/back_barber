@@ -58,10 +58,11 @@ module.exports = (sequelize, DataTypes) => {
 
   User.associate = (models) => {
     User.hasMany(models.Review, {
-      foreignKey: 'userId',
+      foreignKey: 'user_id',
       allowNull: false
     });
   };
+  
 
   return User;
 };

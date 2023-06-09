@@ -17,28 +17,29 @@ exports.findAllReviews = (req, res) => {
 
 exports.createReview = (req, res) => {
     ReviewModel.create({
-        content: req.body.content,
-        rating: req.body.rating,
-        userId: req.userId
+      comment: req.body.comment,
+      note: req.body.note,
+      user_id: req.userId // Utilisation de la clé étrangère correcte "user_id"
     })
-        .then(result => {
-            const message = "L'avis a bien été créé";
-            res.json({ message, data: result });
-        })
-        .catch(error => {
-            if (error instanceof UniqueConstraintError || error instanceof ValidationError) {
-                return res.status(400).json({ message: error.message, data: error });
-            }
-            const message = "L'avis n'a pas pu être créé";
-            res.status(500).json({ message, data: error });
-        });
-};
+      .then(result => {
+        const message = "L'avis a bien été créé";
+        res.json({ message, data: result });
+      })
+      .catch(error => {
+        if (error instanceof UniqueConstraintError || error instanceof ValidationError) {
+          return res.status(400).json({ message: error.message, data: error });
+        }
+        const message = "L'avis n'a pas pu être créé";
+        res.status(500).json({ message, data: error });
+      });
+  };
+  
 
 exports.updateReview = (req, res) => {
     ReviewModel.update(req.body, {
         where: {
             id: req.params.id,
-            userId: req.userId
+            user_id: req.user_id
         }
     })
         .then(([rowsUpdated]) => {
