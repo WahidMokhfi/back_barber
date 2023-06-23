@@ -58,7 +58,7 @@ exports.updateCategory = (req, res) => {
 };
 
 exports.deleteCategory = (req, res) => {
-    CategoryModel.findByPk(req.params.id, { include: [ServiceModel] })
+    CategoryModel.findById(req.params.id, { include: [ServiceModel] })
         .then((category) => {
             if (!category) {
                 const message = "La catégorie que vous souhaitez supprimer n'existe pas.";
@@ -81,6 +81,25 @@ exports.deleteCategory = (req, res) => {
             res.status(500).json({ message });
         });
 };
+
+exports.findCategoryById = (req, res) => {
+    const categoryId = req.params.id;
+    CategoryModel.findById(categoryId)
+        .then((category) => {
+            if (!category) {
+                const message = 'Aucune catégorie trouvée avec cet identifiant.';
+                res.status(404).json({ message });
+            } else {
+                const message = 'La catégorie a été trouvée avec succès.';
+                res.json({ message, data: category });
+            }
+        })
+        .catch((error) => {
+            const message = 'Une erreur est survenue.';
+            res.status(500).json({ message });
+        });
+};
+
 
 
 

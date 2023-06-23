@@ -1,5 +1,5 @@
 const { Op, UniqueConstraintError, ValidationError } = require('sequelize');
-const { UserModel, ReviewModel } = require('../db/sequelize');
+const { User, Review } = require('../db/sequelize');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const privateKey = require('../auth/private_key');
@@ -10,7 +10,7 @@ exports.login = (req, res) => {
     return res.status(400).json({ message: msg });
   }
 
-  UserModel.findOne({ where: { username: req.body.username } })
+  User.findOne({ where: { username: req.body.username } })
     .then(user => {
       if (!user) {
         const msg = "L'utilisateur demandé n'existe pas.";
@@ -24,18 +24,19 @@ exports.login = (req, res) => {
             return res.status(404).json({ message: msg });
           }
 
-          // json web token
-          const token = jwt.sign({
-            data: user.id
-          }, privateKey, { expiresIn: '8h' });
+          const token = jwt.sign({ data: user.id }, privateKey, { expiresIn: '8h' });
 
           const msg = "L'utilisateur a été connecté avec succès.";
           user.password = "hidden";
           return res.json({ message: msg, user, token });
+        })
+        .catch(error => {
+          const msg = "Une erreur s'est produite lors de la comparaison des mots de passe.";
+          return res.status(500).json({ message: msg, error });
         });
     })
     .catch(error => {
-      const msg = "L'utilisateur n'a pas pu se connecter.";
+      const msg = "Une erreur s'est produite lors de la recherche de l'utilisateur.";
       return res.status(500).json({ message: msg, error });
     });
 };
@@ -43,16 +44,18 @@ exports.login = (req, res) => {
 exports.signup = (req, res) => {
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
-      let roles = ["user"]; // Par défaut, le rôle est défini sur "user"
+      let roles = ["user"];
 
       if (req.body.role === "admin") {
-        roles.push("admin"); // Si le rôle est "admin", ajouter le rôle "admin"
+        roles.push("admin");
       }
 
-      return UserModel.create({
+      return User.create({
         username: req.body.username,
         password: hash,
-        roles: roles, // Attribuer les rôles appropriés à l'utilisateur
+        email: req.body.email,
+        phoneNumber: req.body.phoneNumber,
+        roles: roles.join(','),
       }).then((userCreated) => {
         const message = `L'utilisateur ${userCreated.username} a bien été créé`;
         userCreated.password = 'hidden';
@@ -69,7 +72,6 @@ exports.signup = (req, res) => {
 };
 
 exports.logout = (req, res) => {
-  // Supprimer le jeton d'authentification stocké dans le localStorage
   localStorage.removeItem('token');
 
   const msg = "Déconnexion réussie.";
@@ -88,24 +90,23 @@ exports.protect = (req, res, next) => {
     const token = authorizationHeader.split(' ')[1];
     const decoded = jwt.verify(token, privateKey);
     req.userId = decoded.data;
+    next();
   } catch (err) {
     const message = "Jeton invalide";
     return res.status(403).json({ message, data: err });
   }
-
-  return next();
 };
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    UserModel.findByPk(req.userId)
+    User.findByPk(req.userId)
       .then(user => {
         console.log(user.username, user.id, roles);
         if (!user || !roles.every(role => user.roles.includes(role))) {
           const message = "Droits insuffisants";
           return res.status(403).json({ message });
         }
-        return next();
+        next();
       })
       .catch(err => {
         const message = "Erreur lors de l'autorisation";
@@ -115,7 +116,7 @@ exports.restrictTo = (...roles) => {
 };
 
 exports.restrictToOwnUser = (req, res, next) => {
-  ReviewModel.findByPk(req.params.id)
+  Review.findByPk(req.params.id)
     .then(review => {
       if (!review) {
         const message = `Le commentaire n°${req.params.id} n'existe pas`;
@@ -125,11 +126,18 @@ exports.restrictToOwnUser = (req, res, next) => {
         const message = "Tu n'es pas le créateur de cette ressource";
         return res.status(403).json({ message });
       }
-      return next();
+      next();
     })
     .catch(err => {
       const message = "Erreur lors de l'autorisation";
       res.status(500).json({ message, data: err });
     });
 };
+
+
+
+
+
+
+
 

@@ -1,41 +1,56 @@
-module.exports = (sequelize, DataTypes) => {
-  const Review = sequelize.define('Review', {
+const { Model, DataTypes } = require('sequelize');
+
+module.exports = (sequelize) => {
+  class Review extends Model {}
+  Review.init({
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    comment: {
+    content: {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    note: {
+    user_id: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      field: 'created_at'
-    },
-    user_id: {
+    service_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      field: 'user_id'
+      allowNull: false
+    },
+    rating: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
   }, {
+    sequelize,
+    modelName: 'Review',
+    tableName: 'reviews',
     timestamps: false
   });
 
-  Review.associate = (models) => {
-    Review.belongsTo(models.User, {
-      foreignKey: 'user_id',
-      allowNull: false
-    });
-  };
-
   return Review;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

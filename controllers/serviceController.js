@@ -1,4 +1,4 @@
-let coworkings = require('../mock-services');
+let services = require('../mock-services');
 const { Op, UniqueConstraintError, ValidationError, QueryTypes } = require('sequelize');
 const { ServiceModel, ReviewModel, sequelize } = require('../db/sequelize')
 
@@ -31,7 +31,7 @@ exports.findAllServices = (req, res) => {
     }
 }
 
-exports.findServiceByPk = (req, res) => {
+exports.findServiceById = (req, res) => {
     // Afficher le service correspondant à l'id en params, en le récupérant dans la bdd findByPk()
     ServiceModel.findByPk(req.params.id, {
         include: ReviewModel

@@ -27,14 +27,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: 'user',
       set(roles) {
-        this.setDataValue('roles', roles.join());
+        if (Array.isArray(roles)) {
+          this.setDataValue('roles', roles.join());
+        } else {
+          this.setDataValue('roles', roles);
+        }
       },
       get() {
-        return this.getDataValue('roles').split(',');
+        const roles = this.getDataValue('roles');
+        if (roles) {
+          return roles.split(',');
+        }
+        return [];
       },
       validate: {
         areRolesValid(roles) {
-          if (!roles) {
+          if (!roles || roles.length === 0) {
             throw new Error("Un utilisateur doit avoir au moins un rôle");
           }
           roles.split(',').forEach(role => {
@@ -44,8 +52,30 @@ module.exports = (sequelize, DataTypes) => {
           });
         }
       }
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: {
+        msg: "L'adresse e-mail est déjà utilisée."
+      },
+      validate: {
+        isEmail: {
+          msg: "L'adresse e-mail est invalide."
+        }
+      }
+    },
+    phone_number: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isNumeric: {
+          msg: "Le numéro de téléphone doit être composé de chiffres uniquement."
+        }
+      }
     }
   }, {
+    tableName: 'users',
     timestamps: true,
     createdAt: 'created',
     updatedAt: false,
@@ -62,10 +92,36 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     });
   };
-  
 
   return User;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

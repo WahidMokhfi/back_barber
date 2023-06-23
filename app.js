@@ -36,12 +36,13 @@ sequelize.initDb(); // Initialisation de la base de données
 const serviceRouter = require('./routes/serviceRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const categoryRouter = require('./routes/categoryRoutes');
 
 // Utilisation des routes correspondantes
 app.use('/api/services', serviceRouter);
 app.use('/api/users', userRouter);
 app.use('/api/reviews', reviewRouter);
-
+app.use('/api/categories', categoryRouter);
 // Démarrage du serveur sur le port spécifié
 app.listen(port, () => {
   console.log(`Le serveur est en écoute sur le port ${port}`);
