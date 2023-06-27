@@ -46,7 +46,7 @@ Service.belongsTo(Category, {
 const initDb = async () => {
   try {
     await sequelize.authenticate();
-    console.log('Salut Wahid, la connexion à la base de données a bien été établie.');
+    console.log('La connexion à la base de données a bien été établie.');
 
     await sequelize.sync({ force: true });
     console.log('Les 4 tables ont été créées avec succès.');
@@ -133,7 +133,7 @@ const initDb = async () => {
     // ... Ajoutez d'autres opérations d'initialisation de données ici ...
 
   } catch (error) {
-    console.error('Erreur lors de l\'initialisation de la base de données:', error);
+    console.error('Erreur lors de l\'initialisation de la base de données :', error);
   }
 };
 
@@ -145,6 +145,8 @@ module.exports = {
   Category,
   initDb
 };
+
+
 
 
 
