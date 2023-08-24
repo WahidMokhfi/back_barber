@@ -111,6 +111,7 @@ exports.createService = (req, res) => {
     name: newService.name,
     price: newService.price,
     description: newService.description,
+    service_name: newService.service_name,
     category_id: newService.category_id,
     category_name: newService.category_name,
   })
