@@ -9,11 +9,14 @@ router
   .post(authController.protect, reviewController.createReviewForService);
 
 router
-  .route('/:id')
+  .route('/:id') // mise à jour et suppression d'avis
   .put(authController.protect, authController.restrictTo('admin'), reviewController.updateReview)
   .delete(authController.protect, authController.restrictTo('admin'), reviewController.deleteReview);
 
-module.exports = router;
+
+module.exports = router
+
+
 
 
 

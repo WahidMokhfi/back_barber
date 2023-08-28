@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const { UniqueConstraintError, ValidationError } = require('sequelize');
 const { User, Review } = require('../db/sequelize'); 
 
@@ -35,7 +34,6 @@ exports.findUserByPk = (req, res) => {
             res.status(500).json({ message, data: error });
         });
 };
-
 
 exports.updateUser = (req, res) => {
     User.update(req.body, {
@@ -80,44 +78,38 @@ exports.deleteUser = (req, res) => {
             res.status(500).json({ message, data: error });
         });
 };
-
-exports.signup = (req, res) => {
-    bcrypt.hash(req.body.password, 10)
-      .then(hash => {
-        let roles = ["user"];
   
-        if (req.body.role === "admin") {
-          roles.push("admin");
-        }
-  
-        return User.create({
-          username: req.body.username,
-          password: hash,
-          email: req.body.email,
-          phone_number: req.body.phone_number,
-          roles: roles,
-        }).then((userCreated) => {
-          const message = `L'utilisateur ${userCreated.username} a bien été créé`;
-          userCreated.password = 'hidden';
-          return res.json({ message, data: userCreated });
-        });
-      })
-      .catch(error => {
-        if (error instanceof UniqueConstraintError || error instanceof ValidationError) {
-          return res.status(400).json({ message: error.message, data: error });
-        }
-        const message = "Un problème est survenu lors de la création du profil";
-        return res.status(500).json({ message, data: error });
-      });
-  };
-  
-
 exports.logout = (req, res) => {
     req.session.destroy();
 
     const msg = "Déconnexion réussie.";
     res.json({ message: msg });
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

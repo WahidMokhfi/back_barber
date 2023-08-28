@@ -1,5 +1,5 @@
-const { Op, UniqueConstraintError, ValidationError } = require('sequelize');
-const { Review, User } = require('../db/sequelize');
+const {  UniqueConstraintError, ValidationError } = require('sequelize');
+const { Review, User, Service } = require('../db/sequelize');
 
 exports.findAllReviews = (req, res) => {
   Review.findAll({
@@ -61,27 +61,38 @@ exports.deleteReview = (req, res) => {
     });
 };
 
-exports.createReviewForService = (req, res) => {
-  Review.create({
-    content: req.body.content,
-    user_id: req.userId,
-    service_id: req.params.service_id,
-    service_name: service.service_name,
-    rating: req.body.rating,
-    username: req.body.username
-  })
-    .then(result => {
-      const message = "L'avis a bien été créé pour le service spécifié";
-      res.json({ message, data: result });
-    })
-    .catch(error => {
-      if (error instanceof UniqueConstraintError || error instanceof ValidationError) {
-        return res.status(400).json({ message: error.message, data: error });
-      }
-      const message = "L'avis n'a pas pu être créé pour le service spécifié";
-      res.status(500).json({ message, data: error });
+exports.createReviewForService = async (req, res) => {
+  try {
+    const service = await Service.findOne({ where: { id: req.body.service_id } });
+
+    if (!service) {
+      return res.status(404).json({ message: "Le service spécifié n'a pas été trouvé" });
+    }
+
+    const review = await Review.create({
+      content: req.body.content,
+      user_id: req.body.user_id,
+      service_id: req.body.service_id,
+      rating: req.body.rating,
+      service_name: req.body.service_name,
+      username: req.body.username,
     });
+
+    const message = "L'avis a bien été créé pour le service spécifié";
+    res.json({ message, data: review });
+  } catch (error) {
+    console.error("Erreur lors de la création de la review :", error);
+    res.status(500).json({ message: "L'avis n'a pas pu être créé pour le service spécifié", data: error });
+  }
 };
+
+
+
+
+
+
+
+
 
 
 

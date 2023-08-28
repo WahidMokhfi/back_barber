@@ -54,32 +54,37 @@ exports.updateCategory = (req, res) => {
 
 exports.deleteCategory = (req, res) => {
   Category.findByPk(req.params.id, { include: [Service] })
-    .then(category => {
-      if (!category) {
+    .then(categories => {
+      if (!categories) {
         const message = "La catégorie que vous souhaitez supprimer n'existe pas.";
         return res.status(404).json({ message });
       }
 
-      if (category.services.length > 0) {
+      if (categories.services.length > 0) {
         const message = "Impossible de supprimer une catégorie qui contient des services associés.";
         return res.status(400).json({ message });
       }
 
-      return category.destroy()
+      categories.destroy()
         .then(() => {
           const message = 'La catégorie a bien été supprimée.';
           res.json({ message });
+        })
+        .catch(error => {
+          const message = 'Une erreur est survenue lors de la suppression.';
+          res.status(500).json({ message });
         });
     })
     .catch(error => {
-      const message = 'Une erreur est survenue.';
+      const message = 'Une erreur est survenue lors de la récupération de la catégorie.';
       res.status(500).json({ message });
     });
 };
 
+
 exports.createCategory = (req, res) => {
-  const { name } = req.body;
-  Category.create({ name })
+  const { name, category_name, description } = req.body; // J'ajoute category_name et description
+  Category.create({ name, category_name, description }) // que j'utilise dans les champs pour create
     .then(category => {
       const message = 'La catégorie a bien été créée.';
       res.status(201).json({ message, data: category });
@@ -97,6 +102,7 @@ exports.createCategory = (req, res) => {
       }
     });
 };
+
 
 
 

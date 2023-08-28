@@ -1,4 +1,4 @@
-const { Op, UniqueConstraintError, ValidationError } = require('sequelize');
+const { UniqueConstraintError, ValidationError } = require('sequelize');
 const { User, Review } = require('../db/sequelize');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -24,7 +24,8 @@ exports.login = (req, res) => {
             return res.status(404).json({ message: msg });
           }
 
-          const token = jwt.sign({ data: user.id }, privateKey, { expiresIn: '8h' });
+          const token = jwt.sign({ data: user.id }, privateKey, { expiresIn: '24h' });
+
 
           const msg = "L'utilisateur a été connecté avec succès.";
           user.password = "hidden";
@@ -44,10 +45,12 @@ exports.login = (req, res) => {
 exports.signup = (req, res) => {
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
-      let roles = ["user"];
+      let roles = ['user'];
 
-      if (req.body.role === "admin") {
+      if (req.body.roles === "admin") {
         roles.push("admin");
+      } else {
+        roles.push("user");
       }
 
       return User.create({
@@ -59,7 +62,7 @@ exports.signup = (req, res) => {
       }).then((userCreated) => {
         const message = `L'utilisateur ${userCreated.username} a bien été créé`;
         userCreated.password = 'hidden';
-        return res.json({ message, data: userCreated });
+        return res.json({ message, data: userCreated, roles: roles, id: userCreated.id }); 
       });
     })
     .catch(error => {
@@ -134,6 +137,38 @@ exports.restrictToOwnUser = (req, res, next) => {
       res.status(500).json({ message, data: err });
     });
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

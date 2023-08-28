@@ -1,9 +1,7 @@
 const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  class Review extends Model {
-    // ...
-  }
+  class Review extends Model {}
 
   Review.init(
     {
@@ -49,18 +47,20 @@ module.exports = (sequelize) => {
     }
   );
 
-  // Associations avec User et Service
-  Review.belongsTo(sequelize.models.User, {
-    foreignKey: 'user_id',
-    as: 'user',
-  });
-  Review.belongsTo(sequelize.models.Service, {
-    foreignKey: 'service_id',
-    as: 'service',
-  });
+  Review.associate = (models) => {
+    Review.belongsTo(models.User, {
+      foreignKey: 'user_id',
+      as: 'user',
+    });
+    Review.belongsTo(models.Service, {
+      foreignKey: 'service_id',
+      as: 'service',
+    });
+  };
 
   return Review;
 };
+
 
 
 
