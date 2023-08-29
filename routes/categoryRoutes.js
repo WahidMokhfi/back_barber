@@ -8,11 +8,12 @@ router
   .get(categoryController.findAllCategories)
   .post(authController.protect, authController.restrictTo('admin'), categoryController.createCategory);
 
-router
+  router
   .route('/:id')
-  .get(categoryController.findCategoryById)
+  .get(categoryController.getCategoryDetails)
   .put(authController.protect, authController.restrictTo('admin'), categoryController.updateCategory)
   .delete(authController.protect, authController.restrictTo('admin'), categoryController.deleteCategory);
+
 
 module.exports = router;
 

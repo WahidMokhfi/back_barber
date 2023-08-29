@@ -3,7 +3,7 @@ const { Sequelize } = require('sequelize');
 const users = [
   {
     id: 1,
-    username: "guillaume",
+    username: "Guillaume",
     email: "guillaume@example.com",
     phone_number: "1234567890",
     password: "password123",
@@ -13,7 +13,7 @@ const users = [
   },
   {
     id: 2,
-    username: "olivier",
+    username: "Olivier",
     email: "olivier@example.com",
     phone_number: "9876543210",
     password: "password456",
@@ -23,7 +23,7 @@ const users = [
   },
   {
     id: 3,
-    username: "david",
+    username: "David",
     email: "david@example.com",
     phone_number: "5555555555",
     password: "password789",
@@ -33,7 +33,7 @@ const users = [
   },
   {
     id: 4,
-    username: "paco",
+    username: "Paco",
     email: "paco@example.com",
     phone_number: "1111111111",
     password: "passwordabc",
@@ -43,8 +43,8 @@ const users = [
   },
   {
     id: 5,
-    username: "chris",
-    email: "chris@example.com",
+    username: "Ayham",
+    email: "ayham@example.com",
     phone_number: "9999999999",
     password: "passwordxyz",
     roles: "user",
@@ -53,7 +53,7 @@ const users = [
   },
   {
     id: 6,
-    username: "john",
+    username: "John",
     email: "john@example.com",
     phone_number: "4444444444",
     password: "passworddef",
@@ -63,8 +63,8 @@ const users = [
   },
   {
     id: 7,
-    username: "momo",
-    email: "momo@example.com",
+    username: "Insaf",
+    email: "insaf@example.com",
     phone_number: "6666666666",
     password: "passwordghi",
     roles: "user",

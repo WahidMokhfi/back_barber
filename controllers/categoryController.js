@@ -13,22 +13,24 @@ exports.findAllCategories = async (req, res) => {
   }
 };
 
-exports.findCategoryById = (req, res) => {
-  Category.findByPk(req.params.id)
+exports.getCategoryDetails = (req, res) => {
+  const categoryId = req.params.id;
+
+  Category.findByPk(categoryId, { include: [Service] })
     .then(category => {
       if (!category) {
-        const message = 'Aucune catégorie trouvée avec cet identifiant.';
-        res.status(404).json({ message });
-      } else {
-        const message = 'La catégorie a été trouvée avec succès.';
-        res.json({ message, data: category });
+        const message = "Aucune catégorie trouvée avec cet identifiant.";
+        return res.status(404).json({ message });
       }
+
+      res.json({ message: "Détails de la catégorie récupérés avec succès.", data: category });
     })
     .catch(error => {
-      const message = 'Une erreur est survenue.';
+      const message = "Une erreur est survenue lors de la récupération des détails de la catégorie.";
       res.status(500).json({ message });
     });
 };
+
 
 exports.updateCategory = (req, res) => {
   Category.update(req.body, { where: { id: req.params.id } })
