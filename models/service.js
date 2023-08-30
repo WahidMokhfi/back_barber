@@ -57,6 +57,7 @@ module.exports = (sequelize) => {
   Service.belongsTo(sequelize.models.Category, {
     foreignKey: 'category_id',
     as: 'category',
+    onDelete: 'CASCADE', 
   });
 
   return Service;

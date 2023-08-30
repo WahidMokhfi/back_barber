@@ -35,6 +35,7 @@ module.exports = (sequelize) => {
     Category.hasMany(models.Service, {
       foreignKey: 'category_id',
       as: 'services',
+      onDelete: "CASCADE", // Ajoutez cette option pour la suppression en cascade
     });
   };
 

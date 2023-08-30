@@ -54,33 +54,27 @@ exports.updateCategory = (req, res) => {
     });
 };
 
-exports.deleteCategory = (req, res) => {
-  Category.findByPk(req.params.id, { include: [Service] })
-    .then(categories => {
-      if (!categories) {
-        const message = "La catégorie que vous souhaitez supprimer n'existe pas.";
-        return res.status(404).json({ message });
-      }
+exports.deleteCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+    const category = await Category.findByPk(categoryId);
+    
+    if (!category) {
+      return res.status(404).json({ message: "La catégorie demandée n'existe pas." });
+    }
 
-      if (categories.services.length > 0) {
-        const message = "Impossible de supprimer une catégorie qui contient des services associés.";
-        return res.status(400).json({ message });
-      }
-
-      categories.destroy()
-        .then(() => {
-          const message = 'La catégorie a bien été supprimée.';
-          res.json({ message });
-        })
-        .catch(error => {
-          const message = 'Une erreur est survenue lors de la suppression.';
-          res.status(500).json({ message });
-        });
-    })
-    .catch(error => {
-      const message = 'Une erreur est survenue lors de la récupération de la catégorie.';
-      res.status(500).json({ message });
+    const categoryName = category.category_name; // Utilisation de category.category_name
+    await Category.destroy({
+      where: {
+        id: categoryId,
+      },
     });
+
+    res.json({ message: `La catégorie ${categoryName} a bien été supprimée.` });
+  } catch (error) {
+    console.error('Une erreur est survenue lors de la suppression de la catégorie :', error);
+    res.status(500).json({ message: 'Une erreur est survenue lors de la suppression de la catégorie.', error: error.message });
+  }
 };
 
 
