@@ -11,14 +11,24 @@ exports.findAllReviews = (req, res) => {
     ]
   })
     .then(results => {
-      const message = "La liste des avis a bien été récupérée";
-      res.json({ message, data: results });
+      const filteredReviews = results.filter(review => review.rating >= 5);
+      const message = "La liste des avis avec une note de 5 ou plus a bien été récupérée";
+
+      // Ajouter la date au format ISO pour chaque avis
+      const reviewsWithDate = filteredReviews.map(review => ({
+        ...review.toJSON(),
+        date: review.get('date').toISOString(),
+      }));
+
+      res.json({ message, data: reviewsWithDate });
     })
     .catch(error => {
       const message = "La liste des avis n'a pas pu être récupérée";
       res.status(500).json({ message, data: error });
     });
 };
+
+
 
 exports.updateReview = (req, res) => {
   Review.update(req.body, {
@@ -76,6 +86,7 @@ exports.createReviewForService = async (req, res) => {
       rating: req.body.rating,
       service_name: req.body.service_name,
       username: req.body.username,
+      date: new Date(), // Utilise la date actuelle lors de la création
     });
 
     const message = "L'avis a bien été créé pour le service spécifié";
@@ -85,6 +96,7 @@ exports.createReviewForService = async (req, res) => {
     res.status(500).json({ message: "L'avis n'a pas pu être créé pour le service spécifié", data: error });
   }
 };
+
 
 
 

@@ -3,7 +3,7 @@ const { Op, UniqueConstraintError, ValidationError } = require('sequelize');
 
 exports.findAllServices = (req, res) => {
   if (req.query.search) {
-    Service.findAll({ where: { name: { [Op.like]: `%${req.query.search}%` } } })
+    Service.findAll({ where: { service_name: { [Op.like]: `%${req.query.search}%` } } })
       .then((elements) => {
         if (!elements.length) {
           return res.json({ message: "Aucun service ne correspond à votre recherche" })
@@ -89,7 +89,7 @@ exports.deleteService = (req, res) => {
         }
       })
         .then(() => {
-          const message = `Le service ${service.name} a bien été supprimé.`
+          const message = `Le service ${service.service_name} a bien été supprimé.`
           res.json({ message, data: service });
         })
         .catch(error => {
@@ -108,7 +108,6 @@ exports.createService = (req, res) => {
   let newService = req.body;
 
   Service.create({
-    name: newService.name,
     price: newService.price,
     description: newService.description,
     service_name: newService.service_name,

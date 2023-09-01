@@ -9,10 +9,6 @@ module.exports = (sequelize) => {
         primaryKey: true,
         autoIncrement: true
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
       category_name: {
         type: DataTypes.STRING, 
         allowNull: false
@@ -30,12 +26,12 @@ module.exports = (sequelize) => {
     }
   );
 
-  // Association avec les services
+  // Association avec mes services
   Category.associate = (models) => {
     Category.hasMany(models.Service, {
       foreignKey: 'category_id',
       as: 'services',
-      onDelete: "CASCADE", // Ajoutez cette option pour la suppression en cascade
+      onDelete: "CASCADE", // Ajout de cette option pour la suppression en cascade
     });
   };
 

@@ -6,7 +6,8 @@ const reviews = [
     user_id: 1,
     service_id: 1,
     service_name: "Coupe",
-    username: "Guillaume"
+    username: "Guillaume",
+    date: new Date("2023-08-31"), 
   },
   {
     id: 2,
@@ -15,7 +16,8 @@ const reviews = [
     user_id: 2,
     service_id: 1,
     service_name: "Coupe",
-    username: "Olivier"
+    username: "Olivier",
+    date: new Date("2023-08-30"), 
   },
   {
     id: 3,
@@ -24,7 +26,8 @@ const reviews = [
     user_id: 3,
     service_id: 2,
     service_name: "Coloration", 
-    username: "David"
+    username: "David",
+    date: new Date("2023-08-29"),
   },
   {
     id: 4,
@@ -33,7 +36,8 @@ const reviews = [
     user_id: 4,
     service_id: 3,
     service_name: "Défrisage",
-    username: "Paco"
+    username: "Paco",
+    date: new Date("2023-08-28"), 
   },
   {
     id: 5,
@@ -42,7 +46,8 @@ const reviews = [
     user_id: 5,
     service_id: 4,
     service_name: "Barbe",
-    username: "Chris"
+    username: "Chris",
+    date: new Date("2023-08-27"), 
   },
   {
     id: 6,
@@ -51,7 +56,8 @@ const reviews = [
     user_id: 6,
     service_id: 5,
     service_name: "Soin Vapeur", 
-    username: "John"
+    username: "John",
+    date: new Date("2023-08-26"), 
   },
   {
     id: 7,
@@ -60,10 +66,12 @@ const reviews = [
     user_id: 7,
     service_id: 6,
     service_name: "Épilation au fil",
-    username: "Momo"
-  }
+    username: "Momo",
+    date: new Date("2023-08-25"), 
+  },
 ];
 
 module.exports = reviews;
+
 
   

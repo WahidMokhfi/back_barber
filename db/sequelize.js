@@ -54,13 +54,12 @@ const initDb = async () => {
 
     // Initialisation des catégories, services, utilisateurs et avis...
     for (const element of categories) {
-      if (element.name) {
-        const existingCategory = await Category.findOne({ where: { name: element.name } });
+      if (element.category_name) {
+        const existingCategory = await Category.findOne({ where: { category_name: element.category_name } });
         if (existingCategory) {
           console.log(`La catégorie "${element.name}" existe déjà.`);
         } else {
           await Category.create({
-            name: element.name,
             description: element.description,
             category_name: element.category_name,
           });
@@ -70,15 +69,14 @@ const initDb = async () => {
 
     // Initialisation des services
     for (const element of services) {
-      if (element.name && element.category_id) {
+      if (element.service_name && element.category_id) {
         const category = await Category.findByPk(element.category_id);
         if (category) {
-          const existingService = await Service.findOne({ where: { name: element.name, category_id: category.id } });
+          const existingService = await Service.findOne({ where: { service_name: element.service_name, category_id: category.id } });
           if (existingService) {
-            console.log(`Le service "${element.name}" existe déjà dans la catégorie "${category.name}".`);
+            console.log(`Le service "${element.service_name}" existe déjà dans la catégorie "${category.category_name}".`);
           } else {
             await Service.create({
-              name: element.name,
               description: element.description,
               service_name: element.service_name,
               price: element.price,
@@ -125,7 +123,8 @@ const initDb = async () => {
             user_id: user.id,
             service_id: service.id,
             service_name: element.service_name,
-            username: element.username
+            username: element.username,
+            date: element.date,
           });
         }
       } else {

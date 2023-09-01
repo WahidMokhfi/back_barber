@@ -48,9 +48,7 @@ exports.signup = (req, res) => {
       let roles = ['user'];
 
       if (req.body.roles === "admin") {
-        roles.push("admin");
-      } else {
-        roles.push("user");
+        roles = ['admin'];
       }
 
       return User.create({
@@ -73,6 +71,7 @@ exports.signup = (req, res) => {
       return res.status(500).json({ message, data: error });
     });
 };
+
 
 exports.logout = (req, res) => {
   res.clearCookie('token');

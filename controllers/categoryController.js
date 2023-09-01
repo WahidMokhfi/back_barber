@@ -63,7 +63,7 @@ exports.deleteCategory = async (req, res) => {
       return res.status(404).json({ message: "La catégorie demandée n'existe pas." });
     }
 
-    const categoryName = category.category_name; // Utilisation de category.category_name
+    const categoryName = category.category_name; 
     await Category.destroy({
       where: {
         id: categoryId,
@@ -79,8 +79,8 @@ exports.deleteCategory = async (req, res) => {
 
 
 exports.createCategory = (req, res) => {
-  const { name, category_name, description } = req.body; // J'ajoute category_name et description
-  Category.create({ name, category_name, description }) // que j'utilise dans les champs pour create
+  const { category_name, description } = req.body; 
+  Category.create({ category_name, description }) 
     .then(category => {
       const message = 'La catégorie a bien été créée.';
       res.status(201).json({ message, data: category });
