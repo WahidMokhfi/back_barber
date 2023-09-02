@@ -48,6 +48,12 @@ exports.findServiceById = (req, res) => {
 }
 
 exports.updateService = (req, res) => {
+  // Je vérifie si l'utilisateur est authentifié
+  const token = req.header("Authorization");
+  if (!token) {
+    return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
+  }
+
   Service.update(req.body, {
     where: {
       id: req.params.id
@@ -103,8 +109,13 @@ exports.deleteService = (req, res) => {
     });
 }
 
-
 exports.createService = (req, res) => {
+  // Je vérifie si l'utilisateur est authentifié
+  const token = req.header("Authorization");
+  if (!token) {
+    return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
+  }
+
   let newService = req.body;
 
   Service.create({

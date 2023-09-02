@@ -10,7 +10,7 @@ router
 router
   .route('/:id')
   .get(authController.protect, authController.restrictTo('admin'), userController.findUserByPk)
-  .put(authController.protect, userController.updateUser)
+  .put(authController.protect, authController.restrictTo('admin'), userController.updateUser)
   .delete(authController.protect, authController.restrictTo('admin'), userController.deleteUser);
 
 router

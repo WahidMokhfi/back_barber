@@ -14,7 +14,7 @@ exports.findAllReviews = (req, res) => {
       const filteredReviews = results.filter(review => review.rating >= 5);
       const message = "La liste des avis avec une note de 5 ou plus a bien été récupérée";
 
-      // Ajouter la date au format ISO pour chaque avis
+      // j'ajoute la date au format ISO pour chaque avis
       const reviewsWithDate = filteredReviews.map(review => ({
         ...review.toJSON(),
         date: review.get('date').toISOString(),
@@ -28,9 +28,13 @@ exports.findAllReviews = (req, res) => {
     });
 };
 
-
-
 exports.updateReview = (req, res) => {
+  // Je vérifie si l'utilisateur est authentifié
+  const token = req.header("Authorization");
+  if (!token) {
+    return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
+  }
+
   Review.update(req.body, {
     where: {
       id: req.params.id,
@@ -56,6 +60,11 @@ exports.updateReview = (req, res) => {
 };
 
 exports.deleteReview = (req, res) => {
+  // Je vérifie si l'utilisateur est authentifié
+  const token = req.header("Authorization");
+  if (!token) {
+    return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
+  }
   Review.destroy({
     where: {
       id: req.params.id
@@ -73,12 +82,17 @@ exports.deleteReview = (req, res) => {
 
 exports.createReviewForService = async (req, res) => {
   try {
+    // Je vérifie si l'utilisateur est authentifié
+    const token = req.header("Authorization");
+    if (!token) {
+      return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
+    }
+    // Je vérifie si l'utilisateur existe
     const service = await Service.findOne({ where: { id: req.body.service_id } });
 
     if (!service) {
       return res.status(404).json({ message: "Le service spécifié n'a pas été trouvé" });
     }
-
     const review = await Review.create({
       content: req.body.content,
       user_id: req.body.user_id,
@@ -86,9 +100,8 @@ exports.createReviewForService = async (req, res) => {
       rating: req.body.rating,
       service_name: req.body.service_name,
       username: req.body.username,
-      date: new Date(), // Utilise la date actuelle lors de la création
+      date: new Date(), // j'utilise la date actuelle lors de la création
     });
-
     const message = "L'avis a bien été créé pour le service spécifié";
     res.json({ message, data: review });
   } catch (error) {
@@ -96,6 +109,7 @@ exports.createReviewForService = async (req, res) => {
     res.status(500).json({ message: "L'avis n'a pas pu être créé pour le service spécifié", data: error });
   }
 };
+
 
 
 

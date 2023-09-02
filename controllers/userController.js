@@ -2,6 +2,12 @@ const { UniqueConstraintError, ValidationError } = require('sequelize');
 const { User, Review } = require('../db/sequelize'); 
 
 exports.findAllUsers = (req, res) => {
+    // Vérifiez si l'utilisateur est authentifié en utilisant le jeton ici
+    const token = req.header("Authorization");
+    if (!token) {
+        return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
+    }
+
     User.scope('withoutPassword')
         .findAll({
             include: Review
@@ -16,7 +22,14 @@ exports.findAllUsers = (req, res) => {
         });
 };
 
+
 exports.findUserByPk = (req, res) => {
+    // Vérifiez si l'utilisateur est authentifié en utilisant le jeton ici
+    const token = req.header("Authorization");
+    if (!token) {
+        return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
+    }
+
     User.findByPk(req.params.id, {
         include: Review
     })
@@ -35,7 +48,14 @@ exports.findUserByPk = (req, res) => {
         });
 };
 
+
 exports.updateUser = (req, res) => {
+    // Vérifiez si l'utilisateur est authentifié en utilisant le jeton ici
+    const token = req.header("Authorization");
+    if (!token) {
+        return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
+    }
+
     User.update(req.body, {
         where: {
             id: req.params.id
@@ -57,7 +77,14 @@ exports.updateUser = (req, res) => {
     });
 };
 
+
 exports.deleteUser = (req, res) => {
+    // Vérifiez si l'utilisateur est authentifié en utilisant le jeton ici
+    const token = req.header("Authorization");
+    if (!token) {
+        return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
+    }
+
     User.findByPk(req.params.id)
         .then(user => {
             if (user === null) {
@@ -78,6 +105,7 @@ exports.deleteUser = (req, res) => {
             res.status(500).json({ message, data: error });
         });
 };
+
   
 exports.logout = (req, res) => {
     req.session.destroy();
