@@ -5,7 +5,7 @@ const authController = require('../controllers/authController');
 
 router
   .route('/')
-  .get(categoryController.findAllCategories)
+  .get( authController.protect, authController.restrictTo('admin'), categoryController.findAllCategories)
   .post(authController.protect, authController.restrictTo('admin'), categoryController.createCategory);
 
   router
