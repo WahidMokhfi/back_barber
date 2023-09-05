@@ -38,11 +38,10 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      // Ajout du champ "date" de type DATE
       date: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW, // Valeur par défaut : date actuelle
+        defaultValue: DataTypes.NOW, 
       },
     },
     {

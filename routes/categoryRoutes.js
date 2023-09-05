@@ -10,7 +10,7 @@ router
 
   router
   .route('/:id')
-  .get(categoryController.getCategoryDetails)
+  .get(authController.protect, authController.restrictTo('admin'), categoryController.getCategoryDetails)
   .put(authController.protect, authController.restrictTo('admin'), categoryController.updateCategory)
   .delete(authController.protect, authController.restrictTo('admin'), categoryController.deleteCategory);
 
