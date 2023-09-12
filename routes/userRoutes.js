@@ -23,7 +23,8 @@ router
 
 router
   .route('/logout')
-  .get(authController.logout);
+  .get(authController.protect, authController.logout);
+
 
 module.exports = router;
 

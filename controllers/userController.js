@@ -106,14 +106,6 @@ exports.deleteUser = (req, res) => {
         });
 };
 
-  
-exports.logout = (req, res) => {
-    req.session.destroy();
-
-    const msg = "Déconnexion réussie.";
-    res.json({ message: msg });
-};
-
 
 
 
