@@ -2,7 +2,7 @@ const { Category, Service } = require('../db/sequelize');
 const { ValidationError, UniqueConstraintError } = require('sequelize');
 
 exports.findAllCategories = async (req, res) => {
-  // Vérifiez si l'utilisateur est authentifié en utilisant le jeton ici
+  // Je vérifie si l'utilisateur est authentifié
   const token = req.header("Authorization");
   if (!token) {
       return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
@@ -21,7 +21,7 @@ exports.findAllCategories = async (req, res) => {
 
 
 exports.getCategoryDetails = (req, res) => {
-  // Vérifiez si l'utilisateur est authentifié en utilisant le jeton ici
+  // Je vérifie si l'utilisateur est authentifié
   const token = req.header("Authorization");
   if (!token) {
       return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
@@ -46,7 +46,7 @@ exports.getCategoryDetails = (req, res) => {
 
 
 exports.updateCategory = (req, res) => {
-  // Vérifiez si l'utilisateur est authentifié en utilisant le jeton ici
+  // Je vérifie si l'utilisateur est authentifié
   const token = req.header("Authorization");
   if (!token) {
       return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
@@ -74,7 +74,7 @@ exports.updateCategory = (req, res) => {
 };
 
 exports.deleteCategory = async (req, res) => {
-  // Vérifiez si l'utilisateur est authentifié en utilisant le jeton ici
+  // Je vérifie si l'utilisateur est authentifié
   const token = req.header("Authorization");
   if (!token) {
       return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
@@ -103,7 +103,7 @@ exports.deleteCategory = async (req, res) => {
 };
 
 exports.createCategory = (req, res) => {
-  // Vérifiez si l'utilisateur est authentifié en utilisant le jeton ici
+  // Je vérifie si l'utilisateur est authentifié
   const token = req.header("Authorization");
   if (!token) {
       return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });

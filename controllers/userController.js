@@ -2,7 +2,7 @@ const { UniqueConstraintError, ValidationError } = require('sequelize');
 const { User, Review } = require('../db/sequelize'); 
 
 exports.findAllUsers = (req, res) => {
-    // Vérifiez si l'utilisateur est authentifié en utilisant le jeton ici
+   // Je vérifie si l'utilisateur est authentifié
     const token = req.header("Authorization");
     if (!token) {
         return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
@@ -24,7 +24,7 @@ exports.findAllUsers = (req, res) => {
 
 
 exports.findUserByPk = (req, res) => {
-    // Vérifiez si l'utilisateur est authentifié en utilisant le jeton ici
+    // Je vérifie si l'utilisateur est authentifié
     const token = req.header("Authorization");
     if (!token) {
         return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
@@ -50,7 +50,7 @@ exports.findUserByPk = (req, res) => {
 
 
 exports.updateUser = (req, res) => {
-    // Vérifiez si l'utilisateur est authentifié en utilisant le jeton ici
+    // Je vérifie si l'utilisateur est authentifié
     const token = req.header("Authorization");
     if (!token) {
         return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
@@ -79,7 +79,7 @@ exports.updateUser = (req, res) => {
 
 
 exports.deleteUser = (req, res) => {
-    // Vérifiez si l'utilisateur est authentifié en utilisant le jeton ici
+    // Je vérifie si l'utilisateur est authentifié
     const token = req.header("Authorization");
     if (!token) {
         return res.status(401).json({ message: "Accès non autorisé. Veuillez vous connecter." });
